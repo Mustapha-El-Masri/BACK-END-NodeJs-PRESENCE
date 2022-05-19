@@ -9,25 +9,26 @@ const UserSchema = new mongoose.Schema(
   {
     firstname: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
-  slug: String,  
+  
     lastname: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     email: {
       type: String,
-      required: true,        
+      required: [true, 'PLease add an email'],        
       trim: true,
       unique:true
     },
     password: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
+      select:false
     },
     isAdmin: {
       type: Boolean,
@@ -38,6 +39,17 @@ const UserSchema = new mongoose.Schema(
     
  
     }, 
+    role: {
+      type:String,
+      enum: ['employee', 'rh'],
+      default:'employee'
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire:Date,
+    createdAt:{
+      type:Date,
+      default: Date.now
+    },
     contract: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Contracts",
@@ -56,9 +68,6 @@ const UserSchema = new mongoose.Schema(
   baseOption,
   { timestamps: true }
 );
-  UserSchema.pre("save", function (next) {
-  this.slug = slugify(this.firstname, { lower: true });
-  next();
-});  
+
  
 module.exports = mongoose.model("Users",UserSchema)

@@ -4,7 +4,7 @@ const UserModel = require("./User_model");
 const RhSchema = new mongoose.Schema({
   rhname: {
     type: String,
-    default: false,
+    required:false
   },
 });
   
