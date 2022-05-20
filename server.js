@@ -5,10 +5,12 @@ const fileupload = require('express-fileupload')
 const dotenv = require("dotenv");
 const db = require("./config/db");
 const path =require('path')
+const cookieParser = require ('cookie-parser')
 // const morgan = require("morgan")
 require("dotenv").config();
 const PORT = process.env.PORT;
 app.use(express.json());
+app.use(cookieParser())
 const cors = require("cors")
 app.use(cors("corsOptions"))
  

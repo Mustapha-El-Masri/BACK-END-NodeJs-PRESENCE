@@ -1,31 +1,45 @@
 const jwt = require("jsonwebtoken");
+const asyncHandler = require("./async");
+const ErrorResponse = require("../utils/errorResponse");
+const User = require("../models/User_model");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+exports.protect = asyncHandler(async (req, res, next) => {
+  let token;
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (token) {
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-      if (err) {
-        res
-          .status(400)
-          .json({ succcess: false, message: "token not exist" });
-      } else {
-        req.user = user;
-        next();
-      }
-    });
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
   }
-};
+  //else if(req.cookies.token){
+  //token = req.cookies.token
+  //}
+  if (!token) {
+    return next(new ErrorResponse("Not Authorized to access this route", 401));
+  }
 
-const verifyTokenAndAdmin = (req, res, next) => {
-  verifyToken(req, res, () => {
-    if (req.user.isAdmin) {
-      next();
-    } else {
-      res.status(403).json("You are not Allowed to do that");
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    req.user = await User.findById(decoded.id);
+    next();
+  } catch (err) {
+    return next(new ErrorResponse("Not Authorized to access this route", 401));
+  }
+});
+//Grant access to specefic role
+
+exports.authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorResponse(
+          `user role ${req.user.role} is not authorized to access this router`,
+          403
+        )
+      );
     }
-  });
+    next();
+  };
 };
-
-module.exports = { verifyToken, verifyTokenAndAdmin };
