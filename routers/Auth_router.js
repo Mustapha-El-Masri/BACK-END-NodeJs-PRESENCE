@@ -8,5 +8,6 @@ const authcontroller = require("../controllers/Auth_controller")
 
 route.post('/register' , authcontroller.register);
 route.post('/login' , authcontroller.login);
+route.get('/logout' , authcontroller.logout);
 route.get('/me' ,protect, authcontroller.getMe);
 module.exports = route
