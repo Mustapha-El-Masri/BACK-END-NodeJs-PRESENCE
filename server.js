@@ -38,8 +38,7 @@ app.use('/directors' ,directorrouter)
 const holidayrouter = require('./routers/Holiday_router')
 app.use('/holidays' ,holidayrouter)
 
-const rhrouter = require('./routers/Rh_router')
-app.use('/rhs' ,rhrouter)
+
 
 const prrouter = require('./routers/PresenceSheet_router')
 app.use('/pres' ,prrouter)
@@ -53,8 +52,14 @@ app.use('/annualHolidays' ,annualHolidayrouter)
 const ExceptionalHolidayrouter = require('./routers/ExceptionalHoliday_router')
 app.use('/exceptionalHolidays' ,ExceptionalHolidayrouter)
 
+const FileRequestrouter = require('./routers/FileRequest_router')
+app.use('/filerequests' ,FileRequestrouter)
+
+
 const authrouter = require('./routers/Auth_router')
 app.use('/auth' , authrouter)
+const usersrouter = require('./routers/User_router')
+app.use('/users' , usersrouter)
  
 
 app.get("/getImage/:img", (req,res)=>{
