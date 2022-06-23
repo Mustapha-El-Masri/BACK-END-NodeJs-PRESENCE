@@ -58,8 +58,15 @@ app.use('/filerequests' ,FileRequestrouter)
 
 const authrouter = require('./routers/Auth_router')
 app.use('/auth' , authrouter)
+
 const usersrouter = require('./routers/User_router')
 app.use('/users' , usersrouter)
+
+const sectionrouter = require('./routers/Section_router')
+app.use('/sections' , sectionrouter)
+
+const taskrouter = require('./routers/Task_router')
+app.use('/tasks' , taskrouter)
  
 
 app.get("/getImage/:img", (req,res)=>{

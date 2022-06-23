@@ -18,6 +18,23 @@ module.exports = {
       }
     });
   },
+  getPresByDay: async (req, res) => {
+    sheetModel.find({ day: req.query.day }).exec((err, items) => {
+      if (err) {
+        res.status(406).json({
+          success: false,
+          message: "cannot get users",
+        });
+      } else {
+          res.status(201).json({
+            success: true,
+            message: "list users ",
+            data: items,
+          });
+}
+    })
+},
+
   getall: (req, res) => {
     sheetModel.find({}, (err, items) => {
       if (err) {

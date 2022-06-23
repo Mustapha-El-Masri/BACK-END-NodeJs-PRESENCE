@@ -2,22 +2,14 @@ const mongoose = require("mongoose");
 
 const PresenceSheetSchema = new mongoose.Schema(
   {
-    arrivalhour: {
+    day: {
       type: String,
       required: true,
       trim: true,
     },
-    exithour: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    image:{
-      type:String,
-       required: true,
-      trim: true,
-    },
-    user: [
+   
+    
+    users: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",

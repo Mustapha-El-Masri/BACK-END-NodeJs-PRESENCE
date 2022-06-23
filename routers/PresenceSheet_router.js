@@ -10,5 +10,6 @@ route.get("/:id", sheetcontroller.getById);
 
 route.put("/sheet/:id", sheetcontroller.updatesheet);
 route.delete("/sheet/:id", sheetcontroller.delete);
+route.get("/sheet/day", sheetcontroller.getPresByDay);
 
 module.exports = route;

@@ -43,47 +43,31 @@ module.exports = {
       next(err);
     }
   },
-  updatefileRequest: async (req, res, next) => {
-  let fileRequest = await fileRequestModel.findById(req.params.id);
-
-    if (!fileRequest) {
-      return next(
-        new ErrorResponse(`Resource not found with id of ${req.params.id}`, 404)
-      );
-    }
-
-    //Make sure user is fileRequest owner
-    if(fileRequest.user.toString() !== req.user.id && req.user.role !='admin'){
-      return next(
-        new ErrorResponse(`User ${req.params.id} is not authorized to update this fileRequest`, 401)
-      );
-    }
-
-    fileRequest = await fileRequestModel.findOneAndUpdate(req.params.id, req.body, {
+  updateFile : async (req, res, next) => {
+    const file = await fileRequestModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-      runValidators: true,
+      runValidators: true
     });
-
-    res.status(200).json({ success: true, data: fileRequest });
+  
+    res.status(200).json({
+      success: true,
+      data: user
+    });
   },
-  delete: async (req, res, next) => {
-    const fileRequest = await fileRequestModel.findById(req.params.id);
-
-    if (!fileRequest) {
-      return next(
-        new ErrorResponse(`Resource not found with id of ${req.params.id}`, 404)
-      );
-    }
-    if(fileRequest.user.toString() !== req.user.id && req.user.role !='admin'){
-      return next(
-        new ErrorResponse(`User ${req.params.id} is not authorized to delete this fileRequest`, 401)
-      );
-    }
-
-    fileRequest.remove();
-
-    res.status(200).json({ success: true, data: {} });
-  },
+  
+  // @desc      Delete user
+  // @route     DELETE /api/v1/auth/users/:id
+  // @access    Private/Admin
+deleteFile:  async (req, res, next) => {
+    await fileRequestModel.findByIdAndDelete(req.params.id);
+  
+    res.status(200).json({
+      success: true,
+      data: {}
+    });
+  }
+  
+ 
 
   
 
