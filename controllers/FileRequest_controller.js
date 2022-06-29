@@ -15,16 +15,19 @@ module.exports = {
     });
   }), 
     
-  getall: (req, res) => {
+  getall: async (req, res) => {
+    const PAGE_SIZE = 3;
+    const page = parseInt(req.query.page || "0");
+    const total = await fileRequestModel.countDocuments({});
     fileRequestModel.find({}, (err, items) => {
       if (err) {
         res.status(400).json({ status: 400, message: "not found", data: null });
       } else {
         res
           .status(200)
-          .json({ status: 200, message: "list of fileRequests", data: items });
+          .json({ status: 200, message: "list of fileRequests", data: items, total: total, totalPages: Math.ceil(total / PAGE_SIZE) });
       }
-    });
+    }).limit(PAGE_SIZE).skip(PAGE_SIZE * page);
   },
   getById: async (req, res, next) => {
     try {

@@ -19,7 +19,7 @@ module.exports = {
     });
   },
   getPresByDay: async (req, res) => {
-    sheetModel.find({ day: req.query.day }).exec((err, items) => {
+    sheetModel.find({ day: req.query.day }).populate("users").exec((err, items) => {
       if (err) {
         res.status(406).json({
           success: false,
