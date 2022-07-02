@@ -21,13 +21,23 @@ const UserSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
+    designation: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    location: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     email: {
       type: String,
       required: [true, "PLease add an email"],
       trim: true,
       unique: true,
     },
-    birthDate: {
+    date_of_birth: {
       type: Date,
       required: false,
     },
@@ -46,7 +56,7 @@ const UserSchema = new mongoose.Schema(
       enum: ["employee", "rh", "admin"],
       default: "employee",
     },
-    genre: {
+    gender: {
       type: String,
       enum: ["Male", "Female"],
     },
