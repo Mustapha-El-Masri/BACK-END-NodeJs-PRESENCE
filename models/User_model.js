@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
- const slugify = require("slugify");
- const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
+const slugify = require("slugify");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
- const baseOption = {
+const baseOption = {
   discriminatorKey: "itemtype",
   collection: "users",
 };
- 
+
 const UserSchema = new mongoose.Schema(
   {
     firstname: {
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
-  
+
     lastname: {
       type: String,
       required: false,
@@ -23,35 +23,38 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, 'PLease add an email'],        
+      required: [true, "PLease add an email"],
       trim: true,
-      unique:true
+      unique: true,
+    },
+    birthDate: {
+      type: Date,
+      required: false,
     },
     password: {
       type: String,
       required: false,
       trim: true,
-      select:false
+      select: false,
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
+
     image: {
       type: String,
-    
- 
-    }, 
+    },
     role: {
-      type:String,
-      enum: ['employee', 'rh' , 'admin'],
-      default:'employee'
+      type: String,
+      enum: ["employee", "rh", "admin"],
+      default: "employee",
+    },
+    genre: {
+      type: String,
+      enum: ["Male", "Female"],
     },
     resetPasswordToken: String,
-    resetPasswordExpire:Date,
-    createdAt:{
-      type:Date,
-      default: Date.now
+    resetPasswordExpire: Date,
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
     contract: {
       type: mongoose.Schema.Types.ObjectId,
@@ -67,23 +70,28 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "PresenceSheets",
     },
+    section: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Sections",
+    },
   },
+
   baseOption,
   { timestamps: true }
 );
-UserSchema.pre('save', async function(next){
+UserSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password , salt);
-})
-//Sign JWt and return 
-UserSchema.methods.getSignedJwtToken= function(){
-return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
-  expiresIn: process.env.JWT_EXPIRE
+  this.password = await bcrypt.hash(this.password, salt);
 });
+//Sign JWt and return
+UserSchema.methods.getSignedJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
 };
-//Match user entered password to hashed password 
-UserSchema.methods.matchPassword = async function(enteredPassword){
+//Match user entered password to hashed password
+UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
-}
- 
-module.exports = mongoose.model("Users",UserSchema)
+};
+
+module.exports = mongoose.model("Users", UserSchema);
