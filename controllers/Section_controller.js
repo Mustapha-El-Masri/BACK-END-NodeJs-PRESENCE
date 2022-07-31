@@ -14,14 +14,14 @@ exports.getSections = asyncHandler(async (req, res, next) => {
         .status(200)
         .json({ status: 200, message: "list of Sections", data: items });
     }
-  });
+  }).populate("employees").populate("tasks").populate("teamLeader");
 });
 
 // @desc      Get single Section
 
 // @access    Private/Admin
 exports.getSection = asyncHandler(async (req, res, next) => {
-  const section = await Section.findById(req.params.id);
+  const section = await Section.findById(req.params.id).populate("employees").populate("tasks").populate("teamLeader");;
 
   res.status(200).json({
     success: true,

@@ -29,6 +29,18 @@ module.exports = {
       }
     }).limit(PAGE_SIZE).skip(PAGE_SIZE * page);
   },
+  getallInProgress: async (req, res) => {
+    
+    fileRequestModel.find({}, (err, items) => {
+      if (err) {
+        res.status(400).json({ status: 400, message: "not found", data: null });
+      } else {
+        res
+          .status(200)
+          .json({ status: 200, message: "list of fileRequests", data: items });
+      }
+    })
+  },
   getById: async (req, res, next) => {
     try {
       const fileRequest = await fileRequestModel.findById(req.params.id);

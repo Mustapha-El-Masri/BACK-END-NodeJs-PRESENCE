@@ -14,7 +14,7 @@ exports.getTasks = asyncHandler(async (req, res, next) => {
         .status(200)
         .json({ status: 200, message: "list of Tasks", data: items });
     }
-  });
+  }).populate("sections");
 });
 
 // @desc      Get single Task
