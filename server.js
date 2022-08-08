@@ -6,6 +6,11 @@ const dotenv = require("dotenv");
 const db = require("./config/db");
 const path =require('path')
 const cookieParser = require ('cookie-parser')
+const Msg = require('./models/Messages')
+const http = require("http");
+const { Server } = require("socket.io");
+
+
 // const morgan = require("morgan")
 require("dotenv").config();
 const PORT = process.env.PORT;
@@ -22,6 +27,29 @@ var corsOptions= {
 // app.use(morgan("tiny"))
 app.use(express.static(path.join(__dirname, 'public')))
 
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+    },
+  });
+io.on('connection' , (socket) =>{
+    Msg.find().then(()=>{
+        socket.emit('output-messages', result)
+    })
+    console.log('a user connectted');
+    socket.emit('message' ,'Hello world');
+    socket.on('disconnect' , () =>{
+        console.log('user disconnected')
+    });
+    socket.on('chatmessage' , msg =>{
+        const message = new Msg({msg});
+        message.save().then(()=>{
+            io.emit('message', msg)
+        })
+    })
+})
 const contractrouter = require('./routers/Contract_router')
 app.use('/contracts' , contractrouter)
 
@@ -65,7 +93,8 @@ app.use('/users' , usersrouter)
 const sectionrouter = require('./routers/Section_router')
 app.use('/sections' , sectionrouter)
 
-const taskrouter = require('./routers/Task_router')
+const taskrouter = require('./routers/Task_router');
+const { Socket } = require("dgram");
 app.use('/tasks' , taskrouter)
  
 
