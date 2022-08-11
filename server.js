@@ -58,6 +58,9 @@ app.use("/users", usersrouter);
 const sectionrouter = require("./routers/Section_router");
 app.use("/sections", sectionrouter);
 
+const announcementrouter = require("./routers/Announcement_router");
+app.use("/announcements", announcementrouter);
+
 const taskrouter = require("./routers/Task_router");
 const { Socket } = require("dgram");
 app.use("/tasks", taskrouter);
