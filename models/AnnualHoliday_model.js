@@ -1,11 +1,24 @@
 const mongoose = require("mongoose");
 
-const HolidayModel = require('./Holiday_model');
-
 const AnnualHolidaySchema = new mongoose.Schema(
- 
+  {
+   name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    date: {
+      type: Date,
+      required: true,
+      trim: true,
+    },
+    type: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+   
+  },
+  { timestamps: true }
 );
-
-HolidayModel .discriminator("AnnualHolidays",AnnualHolidaySchema) ;
-
-module.exports = mongoose.model("AnnualHolidays");
+module.exports = mongoose.model("AnnualHolidays", AnnualHolidaySchema);
