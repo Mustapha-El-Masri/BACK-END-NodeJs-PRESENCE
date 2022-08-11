@@ -61,8 +61,11 @@ app.use("/sections", sectionrouter);
 const announcementrouter = require("./routers/Announcement_router");
 app.use("/announcements", announcementrouter);
 
+const weddingrouter = require("./routers/Wedding_router");
+app.use("/weddings", weddingrouter);
+
 const taskrouter = require("./routers/Task_router");
-const { Socket } = require("dgram");
+
 app.use("/tasks", taskrouter);
 
 app.get("/getImage/:img", (req, res) => {
