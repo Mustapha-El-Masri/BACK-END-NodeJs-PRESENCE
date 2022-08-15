@@ -12,5 +12,6 @@ route.get("/", usercontroller.getUsers);
 route.get("/:id",  usercontroller.getUser);
 route.put("/user/:id", protect, usercontroller.updateUser);
 route.delete("/user/:id",protect, usercontroller.deleteUser);
+route.get('/email',usercontroller.getname)
 
 module.exports = route;

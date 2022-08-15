@@ -84,6 +84,12 @@ const UserSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Sections",
     },
+    phone: {
+      type: String,
+      required: false,
+      trim: true,
+    
+    },
   },
 
   baseOption,

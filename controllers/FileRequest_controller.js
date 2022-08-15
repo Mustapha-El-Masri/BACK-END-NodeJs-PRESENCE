@@ -3,18 +3,21 @@ const fileRequestModel = require("../models/FileRequest_model");
 const asyncHandler = require("../middleware/async");   
  
 module.exports = {
-   create: asyncHandler(async (req, res, next) => {
-    req.body.image = req.file?.filename; 
-
-    //Add user to req,body
+  create : async (req, res, next) => {
+    // Add user to req,body
     req.body.user = req.user.id;
-    const fileRequest = await fileRequestModel.create(req.body);
-    res.status(200).json({
-      success: true,
-      data: fileRequest,
-    });
-  }), 
+  
     
+
+  
+    const file = await fileRequestModel.create(req.body);
+  
+    res.status(201).json({
+      success: true,
+      data: file
+    });
+  },
+  
   getall: async (req, res) => {
     const PAGE_SIZE = 3;
     const page = parseInt(req.query.page || "0");
@@ -59,15 +62,30 @@ module.exports = {
     }
   },
   updateFile : async (req, res, next) => {
-    const file = await fileRequestModel.findByIdAndUpdate(req.params.id, req.body, {
+    let file = await fileRequestModel.findById(req.params.id);
+  
+    if (!file) {
+      return next(
+        new ErrorResponse(`file not found with id of ${req.params.id}`, 404)
+      );
+    }
+  
+    // Make sure user is file owner
+    if (file.user.toString() !== req.user.id ) {
+      return next(
+        new ErrorResponse(
+          `User ${req.params.id} is not authorized to update this file`,
+          401
+        )
+      );
+    }
+  
+    bootcamp = await Bootcamp.findOneAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
     });
   
-    res.status(200).json({
-      success: true,
-      data: user
-    });
+    res.status(200).json({ success: true, data: bootcamp });
   },
   
   // @desc      Delete user

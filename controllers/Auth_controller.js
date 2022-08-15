@@ -14,11 +14,10 @@ exports.register = asyncHandler(async (req, res, next) => {
     //date_of_birth,
     //gender,
   } = req.body;
-
+  
   const user = await User.create({
   email,
-   
-    password,
+  password,
     //designation,
     //location,
     //date_of_birth,
@@ -169,6 +168,8 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 });
 const sendTokenResponse =(user, statusCode,res) =>{
   const token = user.getSignedJwtToken()
+  const id = user.id;
+
 
   const options = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24*60*60*1000),
@@ -177,6 +178,7 @@ const sendTokenResponse =(user, statusCode,res) =>{
   
   res.status(statusCode)
   .cookie('token',token, options)
+  .cookie('id',id,options)
   .json({success:true,
-  token})
+  token,id})
 }

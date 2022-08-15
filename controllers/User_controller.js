@@ -1,6 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/User_model');
+const User_model = require('../models/User_model');
 
 // @desc      Get all users
 // @route     GET /api/v1/auth/users
@@ -67,3 +68,24 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     data: {}
   });
 });
+exports.getname= (req, res) => {
+   User_model.find({ firstname: req.query.firstname }).select('-__v').exec((err, items) => {
+    if (err) {
+      res
+        .status(406)
+        .json({
+          success: false,
+          message: "Failed to got users by this email",
+        });
+    } else {
+      res
+        .status(201)
+        .json({
+          success: true,
+          message: "List of users",
+          data: items,
+        });
+    }
+  });
+
+}
