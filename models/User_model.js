@@ -67,8 +67,9 @@ const UserSchema = new mongoose.Schema(
       default: Date.now,
     },
     contract: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Contracts",
+      type: String,
+      enum: ["CDI", "CDD","stage"],
+      default: "CDD",
     },
     holiday: [
       {
