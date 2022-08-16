@@ -10,5 +10,5 @@ route.get("/",  SectionController.getSections);
 route.get("/:id",  SectionController.getSection);
 route.put("/section/:id", protect,SectionController.updateSection);
 route.delete("/section/:id", protect, SectionController.deleteSection);
-
+route.get("/firstname",SectionController.getbyname)
 module.exports = route;

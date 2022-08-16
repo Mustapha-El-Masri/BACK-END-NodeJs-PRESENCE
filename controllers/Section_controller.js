@@ -16,6 +16,26 @@ exports.getSections = asyncHandler(async (req, res, next) => {
     }
   }).populate("employees").populate("tasks").populate("teamLeader");
 });
+exports.getbyname =  (req, res) => {
+  Section.find({ name: req.query.name }).select('-__v').exec((err, items) => {
+    if (err) {
+      res
+        .status(406)
+        .json({
+          success: false,
+          message: "Failed to got  teams by this name",
+        });
+    } else {
+      res
+        .status(201)
+        .json({
+          success: true,
+          message: "List of teams",
+          data: items,
+        });
+    }
+  });
+};
 
 // @desc      Get single Section
 
