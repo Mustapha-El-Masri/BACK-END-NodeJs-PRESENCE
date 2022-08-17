@@ -6,36 +6,17 @@ const Section = require("../models/Section_model");
 
 // @access    Private/Admin
 exports.getSections = asyncHandler(async (req, res, next) => {
-  Section.find({}, (err, items) => {
-    if (err) {
-      res.status(400).json({ status: 400, message: "not found", data: null });
-    } else {
-      res
+  let query;
+  let queryStr= JSON.stringify(req.query);
+  queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+  query = Section.find(JSON.parse(queryStr)).populate("employees").populate("tasks").populate("teamLeader");;
+  const sections = await query;
+ res
         .status(200)
-        .json({ status: 200, message: "list of Sections", data: items });
-    }
-  }).populate("employees").populate("tasks").populate("teamLeader");
-});
-exports.getbyname =  (req, res) => {
-  Section.find({ name: req.query.name }).select('-__v').exec((err, items) => {
-    if (err) {
-      res
-        .status(406)
-        .json({
-          success: false,
-          message: "Failed to got  teams by this name",
-        });
-    } else {
-      res
-        .status(201)
-        .json({
-          success: true,
-          message: "List of teams",
-          data: items,
-        });
-    }
-  });
-};
+        .json({ status: 200, message: "list of Sections", data: sections
+       });
+    },
+  );
 
 // @desc      Get single Section
 
@@ -48,7 +29,34 @@ exports.getSection = asyncHandler(async (req, res, next) => {
     data: section,
   });
 });
+// exports.getUser = async (req, res) => {
+//   const section = await Section.find({
+//    employees : {$in:[req.body.id]}
+// }, function(err, teamData) {
+//   res.status(200).json({
+//     success: true,
+//     data: teamData,
+//   });
+// });
 
+//   res.status(200).json({
+//     success: true,
+//     data: section,
+//   });
+// };
+
+ exports.getUser = async  function(req,res){
+  {
+    try {
+      const section = await Section.find({
+        employees: { $in: [req.params.userId] },
+      }).populate("employees");
+      res.status(200).json(section);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
+}
 // @desc      Create section
 
 // @access    Private/Admin
