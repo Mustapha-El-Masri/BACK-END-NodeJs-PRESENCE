@@ -19,16 +19,8 @@ const SectionSchema = new mongoose.Schema(
         ref: "Users",
       },
     ],
-    teamLeader: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
-    },
-    tasks: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Tasks",
-        },
-      ],
+ 
+    
   },
 
   { timestamps: true }

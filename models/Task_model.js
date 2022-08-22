@@ -68,12 +68,12 @@ const TaskSchema = new mongoose.Schema(
       default:0,
       trim: true,
     },
-    sections: [
+    section: 
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Sections",
       },
-    ],
+    
 
     
     // users: [

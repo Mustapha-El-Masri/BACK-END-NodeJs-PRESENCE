@@ -14,8 +14,22 @@ exports.getTasks = asyncHandler(async (req, res, next) => {
         .status(200)
         .json({ status: 200, message: "list of Tasks", data: items });
     }
-  }).populate("sections");
+  }).populate("section");
 });
+exports.getTaskBySection = async  function(req,res){
+  {
+    try {
+      const task = await Task.find({
+        section: { $in: [req.params.sectionId] },
+      }).populate("section");
+      res.status(200).json({success: true,
+        data: task,
+      });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
+}
 
 // @desc      Get single Task
 

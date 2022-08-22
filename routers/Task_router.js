@@ -10,5 +10,6 @@ route.get("/",  TaskController.getTasks);
 route.get("/:id",  TaskController.getTask);
 route.put("/task/:id", protect,TaskController.updateTask);
 route.delete("/task/:id", protect, TaskController.deleteTask);
+route.get("/section/:sectionId", TaskController.getTaskBySection);
 
 module.exports = route;

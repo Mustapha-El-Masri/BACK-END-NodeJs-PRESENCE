@@ -9,7 +9,7 @@ exports.getSections = asyncHandler(async (req, res, next) => {
   let query;
   let queryStr= JSON.stringify(req.query);
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-  query = Section.find(JSON.parse(queryStr)).populate("employees").populate("tasks").populate("teamLeader");;
+  query = Section.find(JSON.parse(queryStr)).populate("employees");
   const sections = await query;
  res
         .status(200)
@@ -22,7 +22,7 @@ exports.getSections = asyncHandler(async (req, res, next) => {
 
 // @access    Private/Admin
 exports.getSection = asyncHandler(async (req, res, next) => {
-  const section = await Section.findById(req.params.id).populate("employees").populate("tasks").populate("teamLeader");;
+  const section = await Section.findById(req.params.id).populate("employees");
 
   res.status(200).json({
     success: true,
@@ -51,7 +51,9 @@ exports.getSection = asyncHandler(async (req, res, next) => {
       const section = await Section.find({
         employees: { $in: [req.params.userId] },
       }).populate("employees");
-      res.status(200).json(section);
+      res.status(200).json({success: true,
+        data: section,
+      });
     } catch (err) {
       res.status(500).json(err);
     }
