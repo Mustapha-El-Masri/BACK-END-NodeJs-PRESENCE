@@ -61,32 +61,18 @@ module.exports = {
       next(err);
     }
   },
-  updateFile : async (req, res, next) => {
-    let file = await fileRequestModel.findById(req.params.id);
-  
-    if (!file) {
-      return next(
-        new ErrorResponse(`file not found with id of ${req.params.id}`, 404)
-      );
-    }
-  
-    // Make sure user is file owner
-    if (file.user.toString() !== req.user.id ) {
-      return next(
-        new ErrorResponse(
-          `User ${req.params.id} is not authorized to update this file`,
-          401
-        )
-      );
-    }
-  
-    bootcamp = await Bootcamp.findOneAndUpdate(req.params.id, req.body, {
+  updateFile :asyncHandler(async (req, res, next) => {
+    const file = await fileRequestModel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-      runValidators: true
+      runValidators: true,
     });
   
-    res.status(200).json({ success: true, data: bootcamp });
-  },
+    res.status(200).json({
+      success: true,
+      data: file,
+    });
+  }),
+  
   
   // @desc      Delete user
   // @route     DELETE /api/v1/auth/users/:id

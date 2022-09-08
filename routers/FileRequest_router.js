@@ -9,7 +9,7 @@ route.post("/create", upload.single("photo"),protect, fileRequestcontroller.crea
 route.get("/", protect, authorize('admin'),  fileRequestcontroller.getall);
 route.get("/inprogress",  fileRequestcontroller.getallInProgress);
 route.get("/:id",  fileRequestcontroller.getById);
-route.put("/fileRequest/:id", protect,authorize('admin'), fileRequestcontroller.updateFile);
+route.put("/fileRequest/:id",  fileRequestcontroller.updateFile);
 route.delete("/fileRequest/:id", protect, fileRequestcontroller.deleteFile);
 
 module.exports = route;

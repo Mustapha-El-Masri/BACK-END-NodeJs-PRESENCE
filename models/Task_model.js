@@ -8,7 +8,7 @@ const TaskSchema = new mongoose.Schema(
       trim: true,
     },
     enddate: {
-      type: Date,
+      type: String,
       required: false,
       trim: true,
     },

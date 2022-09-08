@@ -6,22 +6,25 @@ const crypto=require("crypto")
 
 exports.register = asyncHandler(async (req, res, next) => {
   const {
+    firstname,
+    lastname,
     email,
-   
     password,
-    //designation,
-    //location,
-    //date_of_birth,
-    //gender,
+    designation,
+    location,
+    date_of_birth,
+    gender,
   } = req.body;
   
   const user = await User.create({
+    firstname,
+    lastname,
   email,
   password,
-    //designation,
-    //location,
-    //date_of_birth,
-    //gender,
+    designation,
+    location,
+    date_of_birth,
+    gender,
   });
 
   //create token
@@ -180,5 +183,5 @@ const sendTokenResponse =(user, statusCode,res) =>{
   .cookie('token',token, options)
   .cookie('id',id,options)
   .json({success:true,
-  token,id})
+  token,id , user})
 }

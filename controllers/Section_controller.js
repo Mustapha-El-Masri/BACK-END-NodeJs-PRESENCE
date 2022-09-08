@@ -1,6 +1,7 @@
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Section = require("../models/Section_model");
+const User = require("../models/User_model");
 
 // @desc      Get all Sections
 
@@ -59,6 +60,7 @@ exports.getSection = asyncHandler(async (req, res, next) => {
     }
   }
 }
+
 // @desc      Create section
 
 // @access    Private/Admin
@@ -97,3 +99,22 @@ exports.deleteSection = asyncHandler(async (req, res, next) => {
     data: {},
   });
 });
+exports.addUser = asyncHandler( async(req, res, next) => {
+  const user = await User.create(req.body);
+ 
+  const section = await  Section.findById(req.params.id);
+
+ let arr =  section.employees.push(user)
+
+console.log(employees)
+    res.status(201).json({
+      message: "member added successfully",
+       data:employees
+    });
+  
+ 
+  
+
+});
+
+

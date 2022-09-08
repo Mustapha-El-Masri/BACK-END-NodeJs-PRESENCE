@@ -63,6 +63,8 @@ app.use("/announcements", announcementrouter);
 
 const weddingrouter = require("./routers/Wedding_router");
 app.use("/weddings", weddingrouter);
+const schedulerouter = require("./routers/Schedule_router");
+app.use("/schedules", schedulerouter);
 
 const taskrouter = require("./routers/Task_router");
 

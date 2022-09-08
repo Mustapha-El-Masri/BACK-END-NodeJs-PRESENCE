@@ -11,5 +11,6 @@ route.get("/:id", SectionController.getSection);
 route.get("/user/:userId", SectionController.getUser);
 route.put("/section/:id", protect, SectionController.updateSection);
 route.delete("/section/:id", protect, SectionController.deleteSection);
+route.post("/add/:id",  SectionController.addUser);
 
 module.exports = route;

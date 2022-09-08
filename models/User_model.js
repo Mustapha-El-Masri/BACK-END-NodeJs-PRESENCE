@@ -56,9 +56,14 @@ const UserSchema = new mongoose.Schema(
       enum: ["employee", "rh", "admin"],
       default: "employee",
     },
+    status: {
+      type: String,
+    
+      default: "Pending",
+    },
     gender: {
       type: String,
-      enum: ["Male", "Female"],
+     
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
@@ -100,8 +105,8 @@ UserSchema.pre("save", async function (next) {
   if(!this.isModified('password')){
     next();
   }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  const salt = await bcrypt.genSaltSync(10);
+  this.password = await bcrypt.hashSync(this.password, salt);
 });
 //Sign JWt and return
 UserSchema.methods.getSignedJwtToken = function () {
