@@ -8,16 +8,17 @@ const User = require("../models/User_model");
 // @access    Private/Admin
 exports.getSections = asyncHandler(async (req, res, next) => {
   let query;
-  let queryStr= JSON.stringify(req.query);
-  queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+  let queryStr = JSON.stringify(req.query);
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
   query = Section.find(JSON.parse(queryStr)).populate("employees");
   const sections = await query;
- res
-        .status(200)
-        .json({ status: 200, message: "list of Sections", data: sections
-       });
-    },
-  );
+  res
+    .status(200)
+    .json({ status: 200, message: "list of Sections", data: sections });
+});
 
 // @desc      Get single Section
 
@@ -46,20 +47,18 @@ exports.getSection = asyncHandler(async (req, res, next) => {
 //   });
 // };
 
- exports.getUser = async  function(req,res){
+exports.getUser = async function (req, res) {
   {
     try {
       const section = await Section.find({
         employees: { $in: [req.params.userId] },
       }).populate("employees");
-      res.status(200).json({success: true,
-        data: section,
-      });
+      res.status(200).json({ success: true, data: section });
     } catch (err) {
       res.status(500).json(err);
     }
   }
-}
+};
 
 // @desc      Create section
 
@@ -99,22 +98,16 @@ exports.deleteSection = asyncHandler(async (req, res, next) => {
     data: {},
   });
 });
-exports.addUser = asyncHandler( async(req, res, next) => {
+exports.addUser = asyncHandler(async (req, res, next) => {
   const user = await User.create(req.body);
- 
-  const section = await  Section.findById(req.params.id);
 
- let arr =  section.employees.push(user)
+  const section = await Section.findById(req.params.id);
 
-console.log(employees)
-    res.status(201).json({
-      message: "member added successfully",
-       data:employees
-    });
-  
- 
-  
+  let arr = section.employees.push(user);
 
+  console.log(employees);
+  res.status(201).json({
+    message: "member added successfully",
+    data: employees,
+  });
 });
-
-

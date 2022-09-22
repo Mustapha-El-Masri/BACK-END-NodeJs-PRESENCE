@@ -7,6 +7,7 @@ const db = require("./config/db");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const Msg = require("./models/Messages");
+const jwt = require("jsonwebtoken");
 
 // const morgan = require("morgan")
 require("dotenv").config();
@@ -23,6 +24,8 @@ var corsOptions = {
 //File uploading
 // app.use(morgan("tiny"))
 app.use(express.static(path.join(__dirname, "public")));
+
+//rUN When client connects
 
 const contractrouter = require("./routers/Contract_router");
 app.use("/contracts", contractrouter);
@@ -67,6 +70,8 @@ const schedulerouter = require("./routers/Schedule_router");
 app.use("/schedules", schedulerouter);
 
 const taskrouter = require("./routers/Task_router");
+const { isObjectIdOrHexString } = require("mongoose");
+const { Socket } = require("socket.io");
 
 app.use("/tasks", taskrouter);
 
@@ -74,6 +79,14 @@ app.get("/getImage/:img", (req, res) => {
   res.sendFile(__dirname + "/storages/" + req.params.img);
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`server is running on port : ${PORT}`);
+});
+const io = require("socket.io")(server);
+
+io.on("connection", (socket) => {
+  console.log("connected:");
+  socket.on("roomsatu", function (data) {
+    io.emit("kirim", data);
+  });
 });
